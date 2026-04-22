@@ -140,7 +140,6 @@ class PontoView(View):
                 f"> 📅 Início: {inicio.strftime('%d/%m/%Y %H:%M:%S')}\n"
                 f"> \n"
                 f"> 📅 Fim: {fim.strftime('%d/%m/%Y %H:%M:%S')}\n"
-                f"> \n"
             ),
             color=discord.Color.yellow()
         )
