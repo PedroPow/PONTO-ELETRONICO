@@ -97,7 +97,7 @@ class PontoView(View):
                 f"> \n"
                 f"> 📅 Início: {inicio.strftime('%d/%m/%Y %H:%M:%S')}\n\n"
             ),
-            color=discord.Color.yellow()
+            color=discord.Color.green()
         )
 
         embed.set_thumbnail(url="https://media.discordapp.net/attachments/1444735189765849320/1495965745400516708/PRF.png?ex=69e8d2eb&is=69e7816b&hm=013711d4e7c3d7c993284918738c7994c16ddb24a8ffbf7c3ca0f6a6368b7be9&format=webp&quality=lossless&width=518&height=648&")
@@ -143,7 +143,7 @@ class PontoView(View):
                 f"> \n"
                 f"> 📅 Fim: {fim.strftime('%d/%m/%Y %H:%M:%S')}\n"
             ),
-            color=discord.Color.yellow()
+            color=discord.Color.red()
         )
 
         embed.set_thumbnail(url="https://media.discordapp.net/attachments/1444735189765849320/1495965745400516708/PRF.png?ex=69e8d2eb&is=69e7816b&hm=013711d4e7c3d7c993284918738c7994c16ddb24a8ffbf7c3ca0f6a6368b7be9&format=webp&quality=lossless&width=518&height=648&")
