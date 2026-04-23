@@ -196,7 +196,7 @@ async def sistema_check_ativo():
     await bot.wait_until_ready()
 
     while not bot.is_closed():
-        await asyncio.sleep(1800)  # 30 minutos
+        await asyncio.sleep(100)  # 30 minutos
 
         for user_id in list(pontos_ativos.keys()):
             guild = bot.get_guild(GUILD_ID)
