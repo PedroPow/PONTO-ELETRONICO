@@ -196,7 +196,7 @@ async def sistema_check_ativo():
     await bot.wait_until_ready()
 
     while not bot.is_closed():
-        await asyncio.sleep(50)  # 30 minutos
+        await asyncio.sleep(1800)  # espera 30 minutos entre cada verificação 
 
         for user_id in list(pontos_ativos.keys()):
             guild = bot.get_guild(GUILD_ID)
@@ -243,9 +243,9 @@ async def sistema_check_ativo():
                 inicio = pontos_ativos.pop(user_id)
                 fim = datetime.now(brasil)
 
-                duracao = int((fim - inicio).total_seconds())
-                horas, resto = divmod(duracao, 3600)
-                minutos, _ = divmod(resto, 60)
+                duracao = int((fim - inicio).total_seconds()) # calcula duração total em segundos
+                horas, resto = divmod(duracao, 3600) # calcula horas
+                minutos, _ = divmod(resto, 60) # calcula minutos
 
                 embed_fechado = discord.Embed(
                     title="<:PORTAFECHADA:1496324604996747284> Ponto Encerrado por Inatividade",
