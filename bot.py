@@ -210,12 +210,12 @@ async def sistema_check_ativo():
             view = ConfirmarPresencaView(user_id)
 
             embed = discord.Embed(
-                title="<:SINO:1489110783391694902> Verificação de Atividade",
+                title="✅ Verificação de Atividade",
                 description=(
                     f"{membro.mention}, confirme que você está em serviço.\n\n"
                     f"> Caso você não confirme, seu ponto será encerrado por inatividade.\n"
                     f"> Se você estiver presente, clique no botão abaixo para confirmar sua presença.\n\n"
-                    f" Você tem **60 segundos** para responder."
+                    f" Você tem ´60 segundos´ para responder."
                 ),
                 color=discord.Color.yellow()
             )
@@ -249,7 +249,7 @@ async def sistema_check_ativo():
                 embed_fechado = discord.Embed(
                     title="<:PORTAFECHADA:1496357051956199515> Ponto Encerrado por Inatividade",
                     description=(
-                    f"> 👮🏽 Policial: {interaction.user.mention}\n"
+                    f"> 👮🏽 Policial: {membro.mention}\n"
                     f"> \n"
                     f"> 📅 Início: {inicio.strftime('%d/%m/%Y %H:%M:%S')}\n"
                     f"> \n"
