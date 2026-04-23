@@ -171,8 +171,8 @@ class ConfirmarPresencaView(View):
 
     @discord.ui.button(
         label="Estou em serviço",
-        style=discord.ButtonStyle.green,
-        emoji="✅",
+        style=discord.ButtonStyle.gray,
+        emoji="<:AMARELO:1496016145902338069>",
         custom_id="confirmar_presenca"
     )
     async def confirmar(self, interaction: discord.Interaction, button: Button):
@@ -210,13 +210,21 @@ async def sistema_check_ativo():
             view = ConfirmarPresencaView(user_id)
 
             embed = discord.Embed(
-                title="⏳ Verificação de Atividade",
+                title="<:SINO:1489110783391694902> Verificação de Atividade",
                 description=(
                     f"{membro.mention}, confirme que você está em serviço.\n\n"
-                    "⏱️ Você tem **60 segundos** para responder."
+                    f"> Caso você não confirme, seu ponto será encerrado por inatividade.\n"
+                    f"> Se você estiver presente, clique no botão abaixo para confirmar sua presença.\n\n"
+                    f" Você tem **60 segundos** para responder."
                 ),
                 color=discord.Color.yellow()
             )
+
+            embed.set_thumbnail(url="https://media.discordapp.net/attachments/1444735189765849320/1495965745400516708/PRF.png?ex=69e8d2eb&is=69e7816b&hm=013711d4e7c3d7c993284918738c7994c16ddb24a8ffbf7c3ca0f6a6368b7be9&format=webp&quality=lossless&width=518&height=648&")
+
+            embed.set_image(url="https://cdn.discordapp.com/attachments/1444735189765849320/1496323086155255949/FAIXA_PONTO_ELETRONICO.png?ex=69e976f8&is=69e82578&hm=ff8d1d2cf4c4bcb69ea310707e18a5dfc3d0da9ec625d8292fb2bcfe8fe59b03&")
+
+            embed.set_footer(text="Batalhão PRF Virtual® Todos direitos reservados.", icon_url="https://media.discordapp.net/attachments/1444735189765849320/1495965745400516708/PRF.png?ex=69eacd2b&is=69e97bab&hm=ff7effe563624e91fcba390af48b72270d34e95d2cb4f9818bc70e1c7c583326&format=webp&quality=lossless&width=518&height=648&")  
 
             try:
                 msg = await membro.send(embed=embed, view=view)
@@ -239,14 +247,23 @@ async def sistema_check_ativo():
                 minutos, _ = divmod(resto, 60)
 
                 embed_fechado = discord.Embed(
-                    title="⛔ Ponto Encerrado por Inatividade",
+                    title="<:PORTAFECHADA:1496357051956199515> Ponto Encerrado por Inatividade",
                     description=(
-                        f"👮 {membro.mention}\n"
-                        f"⏱️ Tempo: {horas}h {minutos}m\n\n"
-                        f"Motivo: Não confirmou presença."
+                    f"> 👮🏽 Policial: {interaction.user.mention}\n"
+                    f"> \n"
+                    f"> 📅 Início: {inicio.strftime('%d/%m/%Y %H:%M:%S')}\n"
+                    f"> \n"
+                    f"> 📅 Fim: {fim.strftime('%d/%m/%Y %H:%M:%S')}\n\n"
+                    f">  ´Motivo: Não confirmou presença.´"
                     ),
                     color=discord.Color.red()
                 )
+
+                embed.set_thumbnail(url="https://media.discordapp.net/attachments/1444735189765849320/1495965745400516708/PRF.png?ex=69e8d2eb&is=69e7816b&hm=013711d4e7c3d7c993284918738c7994c16ddb24a8ffbf7c3ca0f6a6368b7be9&format=webp&quality=lossless&width=518&height=648&")
+
+                embed.set_image(url="https://cdn.discordapp.com/attachments/1444735189765849320/1496323086155255949/FAIXA_PONTO_ELETRONICO.png?ex=69e976f8&is=69e82578&hm=ff8d1d2cf4c4bcb69ea310707e18a5dfc3d0da9ec625d8292fb2bcfe8fe59b03&")
+
+                embed.set_footer(text="Batalhão PRF Virtual® Todos direitos reservados.", icon_url="https://media.discordapp.net/attachments/1444735189765849320/1495965745400516708/PRF.png?ex=69eacd2b&is=69e97bab&hm=ff7effe563624e91fcba390af48b72270d34e95d2cb4f9818bc70e1c7c583326&format=webp&quality=lossless&width=518&height=648&")                  
 
                 canal_log = guild.get_channel(CANAL_LOG_PONTO)
                 if canal_log:
