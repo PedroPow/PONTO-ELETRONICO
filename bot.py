@@ -104,7 +104,7 @@ class PontoView(View):
 
         embed.set_image(url="https://cdn.discordapp.com/attachments/1444735189765849320/1496323086155255949/FAIXA_PONTO_ELETRONICO.png?ex=69e976f8&is=69e82578&hm=ff8d1d2cf4c4bcb69ea310707e18a5dfc3d0da9ec625d8292fb2bcfe8fe59b03&")
 
-        embed.set_footer(text="Batalhão PRF Virtual® Todos direitos reservados.", icon_url="https://media.discordapp.net/attachments/1496035727241121955/1496048035652964412/PRF.png?ex=69e91f8e&is=69e7ce0e&hm=ed2125666f9e2f5036aef0eadd58f3d3ca2f8ea9755f5ad63a164c3d0febf6d1&")          
+        embed.set_footer(text="Batalhão PRF Virtual® Todos direitos reservados.", icon_url="https://media.discordapp.net/attachments/1496035727241121955/1496048035652964412/PRF.png?ex=69e91f8e&is=69e7ce0e&hm=ed2125666f9e2f5036aef0eadd58f3d3ca2f8ea9755f5ad63a164c3d0febf6d1&")           
 
         await interaction.response.send_message(embed=embed, ephemeral=True)
 
@@ -197,7 +197,7 @@ async def on_ready():
 
         embed.set_image(url="https://cdn.discordapp.com/attachments/1444735189765849320/1496323086155255949/FAIXA_PONTO_ELETRONICO.png?ex=69e976f8&is=69e82578&hm=ff8d1d2cf4c4bcb69ea310707e18a5dfc3d0da9ec625d8292fb2bcfe8fe59b03&")
 
-        embed.set_footer(text="Batalhão PRF Virtual® Todos direitos reservados.", icon_url="https://media.discordapp.net/attachments/1496035727241121955/1496048035652964412/PRF.png?ex=69e91f8e&is=69e7ce0e&hm=ed2125666f9e2f5036aef0eadd58f3d3ca2f8ea9755f5ad63a164c3d0febf6d1&")
+        embed.set_footer(text="Batalhão PRF Virtual® Todos direitos reservados.", icon_url="https://media.discordapp.net/attachments/1444735189765849320/1495965745400516708/PRF.png?ex=69eacd2b&is=69e97bab&hm=ff7effe563624e91fcba390af48b72270d34e95d2cb4f9818bc70e1c7c583326&format=webp&quality=lossless&width=518&height=648&")       
 
         try:
             await canal_botoes.send(embed=embed, view=PontoView())
