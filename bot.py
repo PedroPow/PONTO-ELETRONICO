@@ -267,13 +267,14 @@ async def on_ready():
 
     print(f"✅ Servidor conectado: {guild.name}")
 
-    bot.add_view(PontoView())  # persistência
+    bot.add_view(PontoView())
 
     await atualizar_painel(guild)
 
+    # ✅ CHECK ATIVO (CORRETO)
     if not hasattr(bot, "check_loop_started"):
-    bot.loop.create_task(sistema_check_ativo())
-    bot.check_loop_started = True
+        bot.loop.create_task(sistema_check_ativo())
+        bot.check_loop_started = True
 
     # 🔥 ENVIO DO PAINEL DE BOTÕES (AGORA CERTO)
     canal_botoes = guild.get_channel(CANAL_BOTOES_PONTO)
