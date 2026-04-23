@@ -6,6 +6,7 @@ from config import GUILD_ID, CANAL_BOTOES_PONTO, CANAL_LOG_PONTO, CANAL_PAINEL_P
 from datetime import datetime
 import pytz
 import os
+import asyncio
 
 brasil = pytz.timezone("America/Sao_Paulo")
 
@@ -31,6 +32,7 @@ CANAL_PAINEL_PONTO = 1496313782224552007
 
 # MEMÓRIA
 pontos_ativos = {}
+confirmacoes_pendentes = {}
 mensagem_painel_id = None
 
 # ----------------- PAINEL -----------------
@@ -160,6 +162,98 @@ class PontoView(View):
 
         await atualizar_painel(interaction.guild)
 
+# ----------------- CONFIRMAR PONTO -----------------
+
+class ConfirmarPresencaView(View):
+    def __init__(self, user_id):
+        super().__init__(timeout=60)
+        self.user_id = user_id
+
+    @discord.ui.button(
+        label="Estou em serviço",
+        style=discord.ButtonStyle.green,
+        emoji="✅",
+        custom_id="confirmar_presenca"
+    )
+    async def confirmar(self, interaction: discord.Interaction, button: Button):
+        if interaction.user.id != self.user_id:
+            return await interaction.response.send_message(
+                "❌ Esse botão não é pra você.",
+                ephemeral=True
+            )
+
+        confirmacoes_pendentes[self.user_id] = True
+
+        await interaction.response.send_message(
+            "✅ Presença confirmada!",
+            ephemeral=True
+        )
+
+
+# ----------------- LOOP DE VERIFICAÇÃO DE ATIVIDADE -----------------
+
+async def sistema_check_ativo():
+    await bot.wait_until_ready()
+
+    while not bot.is_closed():
+        await asyncio.sleep(1800)  # 30 minutos
+
+        for user_id in list(pontos_ativos.keys()):
+            guild = bot.get_guild(GUILD_ID)
+            membro = guild.get_member(user_id)
+
+            if not membro:
+                continue
+
+            confirmacoes_pendentes[user_id] = False
+
+            view = ConfirmarPresencaView(user_id)
+
+            embed = discord.Embed(
+                title="⏳ Verificação de Atividade",
+                description=(
+                    f"{membro.mention}, confirme que você está em serviço.\n\n"
+                    "⏱️ Você tem **60 segundos** para responder."
+                ),
+                color=discord.Color.yellow()
+            )
+
+            try:
+                msg = await membro.send(embed=embed, view=view)
+            except:
+                # Se não conseguir DM, manda no canal de log
+                canal = guild.get_channel(CANAL_LOG_PONTO)
+                if canal:
+                    msg = await canal.send(content=membro.mention, embed=embed, view=view)
+                else:
+                    continue
+
+            await asyncio.sleep(60)
+
+            if not confirmacoes_pendentes.get(user_id):
+                inicio = pontos_ativos.pop(user_id)
+                fim = datetime.now(brasil)
+
+                duracao = int((fim - inicio).total_seconds())
+                horas, resto = divmod(duracao, 3600)
+                minutos, _ = divmod(resto, 60)
+
+                embed_fechado = discord.Embed(
+                    title="⛔ Ponto Encerrado por Inatividade",
+                    description=(
+                        f"👮 {membro.mention}\n"
+                        f"⏱️ Tempo: {horas}h {minutos}m\n\n"
+                        f"Motivo: Não confirmou presença."
+                    ),
+                    color=discord.Color.red()
+                )
+
+                canal_log = guild.get_channel(CANAL_LOG_PONTO)
+                if canal_log:
+                    await canal_log.send(embed=embed_fechado)
+
+                await atualizar_painel(guild)        
+
 # ----------------- COMANDO -----------------
 @bot.event
 async def on_ready():
@@ -176,6 +270,10 @@ async def on_ready():
     bot.add_view(PontoView())  # persistência
 
     await atualizar_painel(guild)
+
+    if not hasattr(bot, "check_loop_started"):
+    bot.loop.create_task(sistema_check_ativo())
+    bot.check_loop_started = True
 
     # 🔥 ENVIO DO PAINEL DE BOTÕES (AGORA CERTO)
     canal_botoes = guild.get_channel(CANAL_BOTOES_PONTO)
@@ -209,12 +307,8 @@ async def on_ready():
 
 # ----------------- READY -----------------
 
-    bot.add_view(PontoView())  # persistência
-
     # já cria/atualiza painel automaticamente ao ligar
     await atualizar_painel(guild)
-
-    
 
 # ----------------- RUN -----------------
 if not TOKEN:
