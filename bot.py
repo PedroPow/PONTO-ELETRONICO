@@ -15,6 +15,7 @@ fim = datetime.now(brasil)
 
 intents = discord.Intents.default()
 intents.message_content = True
+intents.members = True
 bot = commands.Bot(command_prefix="!", intents=intents)
 
 TOKEN = os.getenv("TOKEN_PRF")  # Certifique-se de definir o TOKEN no .env ou variáveis de ambiente # Certifique-se de definir o TOKEN no .env ou variáveis de ambiente
@@ -196,11 +197,18 @@ async def sistema_check_ativo():
     await bot.wait_until_ready()
 
     while not bot.is_closed():
-        await asyncio.sleep(5)  # espera 30 minutos entre cada verificação 
+        await asyncio.sleep(60)  # espera 60 segundos entre cada verificação
 
         for user_id in list(pontos_ativos.keys()):
             guild = bot.get_guild(GUILD_ID)
             membro = guild.get_member(user_id)
+
+            if not membro:
+                try:
+                    membro = await guild.fetch_member(user_id)  # 🔥 FORÇA buscar
+                except:
+                    print(f"❌ Não achei o membro {user_id}")
+                    continue
 
             if not membro:
                 continue
