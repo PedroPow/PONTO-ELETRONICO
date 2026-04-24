@@ -196,7 +196,7 @@ async def sistema_check_ativo():
     await bot.wait_until_ready()
 
     while not bot.is_closed():
-        await asyncio.sleep(1800)  # espera 30 minutos entre cada verificação 
+        await asyncio.sleep(5)  # espera 30 minutos entre cada verificação 
 
         for user_id in list(pontos_ativos.keys()):
             guild = bot.get_guild(GUILD_ID)
